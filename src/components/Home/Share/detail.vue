@@ -5,8 +5,8 @@
             <span>{{detail.add_time | fmtdate('YYYY-MM-DD')}}</span> &nbsp;&nbsp;&nbsp;&nbsp; <span>点击次数:{{detail.click}}</span>
         </div>
          <ul class="mui-table-view mui-grid-view mui-grid-9">
-            <li v-for="item in images" :key="item.id" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-                <a href="#">
+            <li v-for="(item,index) in images" :key="index" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+                <a @click.prevent="look(index)" href="#">
                    <img :src="item.src" alt="">
                 </a>
             </li>
@@ -33,6 +33,7 @@ export default {
     created(){
         this.getdetail()
         this.getimages()
+        
     },
     methods:{
         getdetail(){
@@ -61,6 +62,13 @@ export default {
             })
             .catch((err)=>{
                 console.error(err)
+            })
+        },
+        look(){
+            this.axios
+            .get(getthumimages/'+this.id)
+            .then((res)=>{
+                
             })
         }
     },
