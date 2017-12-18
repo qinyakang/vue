@@ -18,13 +18,17 @@ import newsDetail from '../components/Home/News/detail.vue'
 
 import shareDetail from '../components/Home/Share/detail.vue'
 
+import shopDetail from '../components/Home/Buy/detail.vue'
+
+import commentDetail from '../components/Home/Buy/comment.vue'
 let router=new VueRouter({
     linkActiveClass: 'mui-active',
     routes:[
-        {path:'/home',component:home},
-        {path:'/search',component:search},
-        {path:'/shopcar',component:shopcar},
-        {path:'/member',component:member},
+        {path:'/',redirect:'/home'},
+        {path:'/home',meta:{title:'首页'},component:home},
+        {path:'/search',meta:{title:'搜索'},component:search},
+        {path:'/shopcar',meta:{title:'购物车'},component:shopcar},
+        {path:'/member',meta:{title:'会员'},component:member},
 
         {path: '/news', component: news},
         {path: '/buy', component: buy},
@@ -34,8 +38,16 @@ let router=new VueRouter({
         {path: '/video', component: video},
 
         {name:'newsDetail',path:'/news/:id',component:newsDetail,props:true},
-        {name:'shareDetail',path:'/share/:id',component:shareDetail,props:true}
+        {name:'shareDetail',path:'/share/:id',component:shareDetail,props:true},
+        {name:'shopDetail',path:'/buy/:id',component:shopDetail,props:true},
+        {name:'commentDetail',path:'/buy/comment/:id',component:commentDetail,props:true}
     ]
 });
-
+router.afterEach((to,from)=>{
+    if(to.meta.title){
+        document.title=to.meta.title
+    }else{
+        document.title='It is me'
+    }
+})
 export default router;

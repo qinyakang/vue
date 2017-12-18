@@ -8,7 +8,7 @@
           </li>
 
           <li v-for="item in menus" :key="item.id" >
-              <a href="#">{{item.title}}</a>
+              <a @click.prevent="getlist(item.id)" href="#">{{item.title}}</a>
           </li>
           
       </ul>
@@ -83,6 +83,20 @@ export default {
         })
         .catch((err)=>{
             console.error(err)
+        })
+    },
+    getlist(xid){
+        this.axios
+        .get('getimages/'+xid)
+        .then((res)=>{
+            // console.log(res);
+            if(res.status==200&&res.data.status==0){
+                if(res.data.message.length>0){
+                    this.images=res.data.message
+                }                
+            }else{
+                console.log('获取数据失败');
+            }
         })
     }
   }

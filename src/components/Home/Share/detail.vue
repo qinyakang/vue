@@ -6,9 +6,9 @@
         </div>
          <ul class="mui-table-view mui-grid-view mui-grid-9">
             <li v-for="(item,index) in images" :key="index" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-                <a @click.prevent="look(index)" href="#">
-                   <img :src="item.src" alt="">
-                </a>
+
+                   <img class="preview-img" :src="item.src" height="100" @click="$preview.open(index, images)">
+
             </li>
         </ul> 
          <p class="content" v-html="detail.content" >
@@ -21,12 +21,15 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import comment from '../../Public/comment.vue'
+import VuePreview from 'vue-preview'
+Vue.use(VuePreview)
 export default {
     data(){
         return{
             images:[],
-            detail:{}
+            detail:{},
         }
     },
     props:['id'],
@@ -56,6 +59,11 @@ export default {
             .then((res)=>{
                 if(res.status==200&&res.data.status==0){
                     this.images=res.data.message
+
+                    this.images.forEach(item=>{
+                        item.w=600;
+                        item.h=400;
+                    })
                 }else{
                     console.log('服务器错误');
                 }
@@ -64,13 +72,7 @@ export default {
                 console.error(err)
             })
         },
-        look(){
-            this.axios
-            .get(getthumimages/'+this.id)
-            .then((res)=>{
-                
-            })
-        }
+     
     },
 
     components:{

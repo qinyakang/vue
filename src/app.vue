@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <header class="mui-bar mui-bar-nav">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<a v-if="isShow" @click="goback" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">底部选项卡-div模式</h1>
 		</header>
 		<nav class="mui-bar mui-bar-tab">
@@ -16,7 +16,7 @@
 				<span class="mui-tab-label">会员</span>
 			</router-link>
 			<router-link class="mui-tab-item" to="/shopcar">	
-				<span class="mui-icon mui-icon-contact"><span class="mui-badge">9</span></span>
+				<span class="mui-icon mui-icon-contact"><span class="mui-badge">{{count}}</span></span>
 				<span class="mui-tab-label">购物车</span>
 			</router-link>
 			<router-link class="mui-tab-item" to="/search">	
@@ -28,13 +28,59 @@
   </div>
 </template>
 <script>
+import vueObj from './config/communication'
+import {getData} from './config/localstorageHelp'
      export default {
-    
-        data() {
-         return {
-            msg: 'hello vue'
-                  }
-             }
+
+		data() {
+			return {
+				isShow:false,
+				path:'',
+				count:0
+			}
+		},
+		created(){
+			this.back(this.path)
+			vueObj.$on('updateBadge',(count)=>{
+				this.count+=count
+			})
+			let data=getData()
+			// console.log(data);
+			let count=0
+			data.forEach(element => {
+				count+=element.count
+				
+			});
+			this.count=count
+		},
+		methods:{
+			goback(){
+				this.$router.back()
+			},
+			back(path){
+				let arr=['/home','/search','/shopcar','/member']
+				
+					if(arr.indexOf(path)==-1){
+						this.isShow=true
+					}else{
+						this.isShow=false
+					}
+			}
+		},
+		watch:{
+			'$route':function(newValue){
+				this.path=newValue.path
+				let arr=['/home','/search','/shopcar','/member']
+				
+					if(arr.indexOf(newValue.path)==-1){
+						this.isShow=true
+					}else{
+						this.isShow=false
+					}
+				
+			}
+		}
+			 
   }
 </script>
 <style scoped>
